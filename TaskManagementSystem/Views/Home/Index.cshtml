@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="wavy-background">
+    <div class="wavy-content">
+        <h1 class="wavy-title">Manage your tasks</h1>
+        <p class="wavy-subtitle">Leverage the power of this app</p>
+        
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a class="btn btn-light btn-lg px-4 gap-3" asp-controller="Account" asp-action="Login">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+            </a>
+            <a class="btn btn-outline-light btn-lg px-4" asp-controller="Account" asp-action="Register">
+                <i class="bi bi-person-plus me-2"></i>Register
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-10 text-center">
+            <div class="card shadow-lg mb-5 bg-dark text-white border-secondary">
+                <div class="card-body p-5">
+                    <h2 class="card-title mb-4">Get Started</h2>
+                    <p class="card-text mb-4">Sign in to your account or register to start managing your tasks efficiently.</p>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card mb-4 h-100 bg-dark text-white border-secondary">
+                        <div class="card-body text-center">
+                            <i class="bi bi-list-check display-5 mb-3 text-info"></i>
+                            <h5 class="card-title">Track Tasks</h5>
+                            <p class="card-text">Create and manage your tasks with ease. Set due dates and track progress.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4 h-100 bg-dark text-white border-secondary">
+                        <div class="card-body text-center">
+                            <i class="bi bi-kanban display-5 mb-3 text-info"></i>
+                            <h5 class="card-title">Organize Status</h5>
+                            <p class="card-text">Update task status from To Do to In Progress to Done as you work.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4 h-100 bg-dark text-white border-secondary">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-lock display-5 mb-3 text-info"></i>
+                            <h5 class="card-title">Secure Access</h5>
+                            <p class="card-text">Your tasks are private and secure with our user authentication system.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

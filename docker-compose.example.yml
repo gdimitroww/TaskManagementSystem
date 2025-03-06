@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  taskmanagement:
+    build:
+      context: ./TaskManagementSystem
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8443:443"
+    depends_on:
+      - sqlserver
+    environment:
+      # Application environment
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TaskManagementSystem;User Id=sa;Password=Password123!;TrustServerCertificate=True;
+      
+      # Email settings - Using Gmail for sending real emails
+      # You need to set up an App Password: https://myaccount.google.com/apppasswords
+      - EmailSettings__SmtpServer=smtp.gmail.com
+      - EmailSettings__SmtpPort=587
+      - EmailSettings__SmtpUsername=kasparlol1234567@gmail.com
+      - EmailSettings__SmtpPassword=abcdefghijklmnop  # Replace with your 16-character App Password
+      - EmailSettings__SenderEmail=kasparlol1234567@gmail.com
+      - EmailSettings__SenderName=Task Management System
+      - EmailSettings__EnableSsl=true
+    networks:
+      - taskmanagement-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - taskmanagement-network
+
+networks:
+  taskmanagement-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+    driver: local 

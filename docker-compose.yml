@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  taskmanagement:
+    build:
+      context: ./TaskManagementSystem
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8443:443"
+    depends_on:
+      - sqlserver
+    environment:
+      # Application environment
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TaskManagementSystem;User Id=sa;Password=Password123!;TrustServerCertificate=True;
+      
+      # Email settings - Using SendGrid for sending real emails
+      # You'll need to create a free SendGrid account: https://sendgrid.com/
+      - EmailSettings__SmtpServer=smtp.sendgrid.net
+      - EmailSettings__SmtpPort=587
+      - EmailSettings__SmtpUsername=apikey
+      - EmailSettings__SmtpPassword=YOUR_SENDGRID_API_KEY
+      - EmailSettings__SenderEmail=your-email@example.com
+      - EmailSettings__SenderName=Task Management System
+      - EmailSettings__EnableSsl=true
+      
+      # Google Authentication settings
+      # You'll need to create these in the Google Cloud Console
+      - Authentication__Google__ClientId=YOUR_GOOGLE_CLIENT_ID
+      - Authentication__Google__ClientSecret=YOUR_GOOGLE_CLIENT_SECRET
+    networks:
+      - taskmanagement-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - taskmanagement-network
+
+networks:
+  taskmanagement-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+    driver: local 

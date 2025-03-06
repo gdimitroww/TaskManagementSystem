@@ -1,0 +1,280 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Account links styling */
+.account-links {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(33, 37, 41, 0.8);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.account-link {
+  color: #63b3ed;
+  text-decoration: none;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.account-link:hover {
+  color: #fff;
+  background-color: rgba(79, 209, 197, 0.2);
+  transform: translateX(5px);
+  box-shadow: -3px 0 0 #4fd1c5;
+}
+
+.account-link i {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.btn-google {
+  background-color: #fff;
+  color: #757575;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-google:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-google i {
+  color: #ea4335;
+}
+
+.form-floating {
+  margin-bottom: 16px;
+}
+
+.login-card {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-check {
+  margin-bottom: 16px;
+}
+
+/* Dark theme adjustments */
+.dark-bg-wrapper .account-links .btn-link {
+  color: #63b3ed !important;
+}
+
+.dark-bg-wrapper .account-links .btn-link:hover {
+  background-color: rgba(99, 179, 237, 0.15);
+  color: #90cdf4 !important;
+}
+
+.dark-bg-wrapper .form-control {
+  background-color: #212529 !important;
+  color: #fff !important;
+  border-color: #495057 !important;
+}
+
+.dark-bg-wrapper .form-control::placeholder {
+  color: #6c757d !important;
+}
+
+.dark-bg-wrapper .form-control:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: transparent;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  color: transparent;
+}
+
+/* Add these new styles for login/register inputs */
+.form-floating .form-control {
+  background-color: #212529 !important;
+  color: white !important;
+  border-color: #495057 !important;
+}
+
+.form-floating .form-control:focus {
+  background-color: #212529 !important;
+  color: white !important;
+  border-color: #0d6efd !important;
+}
+
+.form-floating .form-control:focus + label,
+.form-floating .form-control:not(:placeholder-shown) + label {
+  color: #adb5bd !important;
+}
+
+/* Style for labels inside form-floating */
+.form-floating label {
+  color: #adb5bd;
+}
+
+/* Login, Register, and Forgot Password form styling */
+.login-card .form-control {
+  background-color: #212529 !important;
+  color: white !important;
+  border-color: #495057 !important;
+}
+
+.login-card input[type="text"],
+.login-card input[type="password"],
+.login-card input[type="email"] {
+  background-color: #212529 !important;
+  color: white !important;
+  border-color: #495057 !important;
+}
+
+/* Override any Bootstrap styles with more specificity */
+.form-control.bg-dark.text-white {
+  background-color: #212529 !important;
+  color: white !important;
+}
+
+/* Extra specificity for form-floating inside login-card */
+.login-card .form-floating input.form-control {
+  background-color: #212529 !important;
+  color: white !important;
+}
+
+/* Additional specificity for form-floating label */
+.login-card .form-floating label {
+  color: #adb5bd !important;
+}
+
+/* Custom Calendar Styles */
+.calendar-container {
+  position: relative;
+  max-width: 300px;
+}
+
+.custom-calendar {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  height: 30px;
+}
+
+.current-month {
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.month-nav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 10px;
+  color: #333;
+  width: 40px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.month-nav:hover {
+  color: #4fd1c5;
+  background-color: #f5f5f5;
+}
+
+.custom-calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-calendar th {
+  padding: 5px;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+  width: 30px;
+  height: 30px;
+}
+
+.custom-calendar td {
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.custom-calendar td:hover:not(.empty):not(.selected) {
+  background-color: #f5f5f5;
+  border-radius: 50%;
+}
+
+.custom-calendar td.today {
+  font-weight: bold;
+  color: #4fd1c5;
+}
+
+.custom-calendar td.selected {
+  background-color: #4fd1c5;
+  color: white;
+  border-radius: 50%;
+}
+
+.custom-calendar td.empty {
+  color: #ccc;
+  cursor: default;
+}
+
+.custom-calendar-display {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: white;
+}

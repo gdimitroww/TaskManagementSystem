@@ -1,0 +1,93 @@
+@model TaskManagementSystem.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="login-card card shadow-lg border-0 mb-5">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h3 class="mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" style="background-color: #212529 !important; color: white !important; border-color: #495057 !important;" class="form-control" autocomplete="username" aria-required="true" placeholder="" />
+                            <label asp-for="Email" style="color: #adb5bd !important;"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="Password" id="password-field" style="background-color: #212529 !important; color: white !important; border-color: #495057 !important;" class="form-control" type="password" autocomplete="current-password" aria-required="true" placeholder="" />
+                            <label asp-for="Password" style="color: #adb5bd !important;"></label>
+                            <button type="button" class="btn position-absolute" 
+                                    style="right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; background: transparent; border: none; color: #63b3ed;"
+                                    onclick="togglePasswordVisibility('password-field', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+                        </div>
+                        
+                        <div class="account-links p-3 bg-dark border border-secondary rounded mb-3">
+                            <div class="d-flex flex-column gap-2">
+                                <a href="@Url.Action("ForgotPassword", "Account")" class="account-link d-flex align-items-center p-2 rounded">
+                                    <i class="bi bi-key me-2 fs-5"></i>
+                                    <span>Forgot your password?</span>
+                                </a>
+                                <a href="@Url.Action("Register", "Account")" class="account-link d-flex align-items-center p-2 rounded">
+                                    <i class="bi bi-person-plus me-2 fs-5"></i>
+                                    <span>Register as a new user</span>
+                                </a>
+                                <a href="@Url.Action("ResendEmailConfirmation", "Account")" class="account-link d-flex align-items-center p-2 rounded">
+                                    <i class="bi bi-envelope me-2 fs-5"></i>
+                                    <span>Resend email confirmation</span>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                        
+                    <div class="mt-4">
+                        <div class="text-center mb-3">
+                            <p class="mb-1">Or use another service to log in</p>
+                        </div>
+                        <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                            <button type="submit" name="provider" value="Google" class="btn w-100 btn-outline-light d-flex align-items-center justify-content-center">
+                                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill:#EA4335;"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+                                <span>Sign in with Google</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePasswordVisibility(fieldId, button) {
+            const passwordField = document.getElementById(fieldId);
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                button.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordField.type = 'password';
+                button.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+    </script>
+} 

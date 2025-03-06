@@ -1,0 +1,76 @@
+@model TaskManagementSystem.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="login-card card shadow-lg border-0 mb-5">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h3 class="mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-center mb-4">Create a new account to manage your tasks.</p>
+                    
+                    <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" style="background-color: #212529 !important; color: white !important; border-color: #495057 !important;" class="form-control" autocomplete="username" aria-required="true" placeholder="" />
+                            <label asp-for="Email" style="color: #adb5bd !important;"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="Password" id="password-field" style="background-color: #212529 !important; color: white !important; border-color: #495057 !important;" class="form-control" type="password" autocomplete="new-password" aria-required="true" placeholder="" />
+                            <label asp-for="Password" style="color: #adb5bd !important;"></label>
+                            <button type="button" class="btn position-absolute" 
+                                    style="right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; background: transparent; border: none; color: #63b3ed;"
+                                    onclick="togglePasswordVisibility('password-field', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="ConfirmPassword" id="confirm-password-field" style="background-color: #212529 !important; color: white !important; border-color: #495057 !important;" class="form-control" type="password" autocomplete="new-password" aria-required="true" placeholder="" />
+                            <label asp-for="ConfirmPassword" style="color: #adb5bd !important;"></label>
+                            <button type="button" class="btn position-absolute" 
+                                    style="right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; background: transparent; border: none; color: #63b3ed;"
+                                    onclick="togglePasswordVisibility('confirm-password-field', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <p>Already have an account? <a href="@Url.Action("Login", "Account")" class="text-primary">Log in</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePasswordVisibility(fieldId, button) {
+            const passwordField = document.getElementById(fieldId);
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                button.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordField.type = 'password';
+                button.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+    </script>
+} 

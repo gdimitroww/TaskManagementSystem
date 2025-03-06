@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h1 class="card-title">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Access Denied
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-lock-fill display-1 text-warning"></i>
+                    </div>
+                    
+                    <h2 class="text-center mb-4">You do not have permission to access this resource.</h2>
+                    
+                    <p class="lead text-center">
+                        Sorry, but you don't have the necessary permissions to view the requested page or perform the requested action.
+                    </p>
+                    
+                    <div class="alert alert-info mt-4">
+                        <h4 class="alert-heading">What can I do?</h4>
+                        <ul>
+                            <li>Return to the <a asp-controller="Home" asp-action="Index">home page</a>.</li>
+                            <li>Go back to your <a asp-controller="Tasks" asp-action="Index">tasks</a>.</li>
+                            <li>If you believe this is an error, please contact the administrator.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-house-fill me-2"></i>Home
+                    </a>
+                    <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-list-check me-2"></i>My Tasks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

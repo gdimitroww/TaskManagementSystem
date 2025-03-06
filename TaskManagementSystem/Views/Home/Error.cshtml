@@ -1,0 +1,40 @@
+@model TaskManagementSystem.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h1 class="card-title">Error</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+                    @if (Model.ShowRequestId)
+                    {
+                        <p>
+                            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                        </p>
+                    }
+
+                    <div class="mt-4">
+                        <h3>What can I do?</h3>
+                        <ul>
+                            <li>Return to the <a asp-controller="Home" asp-action="Index">home page</a>.</li>
+                            <li>If you are an authenticated user, you can go to your <a asp-controller="Tasks" asp-action="Index">tasks</a>.</li>
+                            <li>If the issue persists, please contact the administrator.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-house-fill me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
