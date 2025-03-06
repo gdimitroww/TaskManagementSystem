@@ -2,7 +2,7 @@
 
 A modern, containerized task management application built with ASP.NET Core, Entity Framework Core, and Microsoft SQL Server. This application allows users to create, manage, and track tasks with different priorities and due dates.
 
-![Task Management System](screenshots/home-screen.png)
+![Task Management System](screenshots/home-screen.svg)
 
 ## Features
 

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#1e2124"/>
+  <text x="400" y="120" font-family="Arial" font-size="48" fill="white" text-anchor="middle">Manage your tasks</text>
+  <text x="400" y="180" font-family="Arial" font-size="24" fill="#cccccc" text-anchor="middle">Leverage the power of this app</text>
+  <rect x="300" y="220" width="200" height="50" rx="10" fill="#212529" stroke="#495057"/>
+  <text x="400" y="252" font-family="Arial" font-size="18" fill="#63b3ed" text-anchor="middle">Sign In</text>
+  <rect x="300" y="290" width="200" height="50" rx="10" fill="transparent" stroke="#495057"/>
+  <text x="400" y="322" font-family="Arial" font-size="18" fill="#63b3ed" text-anchor="middle">Register</text>
+</svg> 
