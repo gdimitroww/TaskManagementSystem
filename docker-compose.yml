@@ -1,54 +1,35 @@
-version: '3.8'
+version: '3'
 
 services:
-  taskmanagement:
-    build:
-      context: ./TaskManagementSystem
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-      - "8443:443"
-    depends_on:
-      - sqlserver
-    environment:
-      # Application environment
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TaskManagementSystem;User Id=sa;Password=Password123!;TrustServerCertificate=True;
-      
-      # Email settings - Using SendGrid for sending real emails
-      # You'll need to create a free SendGrid account: https://sendgrid.com/
-      - EmailSettings__SmtpServer=smtp.sendgrid.net
-      - EmailSettings__SmtpPort=587
-      - EmailSettings__SmtpUsername=apikey
-      - EmailSettings__SmtpPassword=YOUR_SENDGRID_API_KEY
-      - EmailSettings__SenderEmail=your-email@example.com
-      - EmailSettings__SenderName=Task Management System
-      - EmailSettings__EnableSsl=true
-      
-      # Google Authentication settings
-      # You'll need to create these in the Google Cloud Console
-      - Authentication__Google__ClientId=YOUR_GOOGLE_CLIENT_ID
-      - Authentication__Google__ClientSecret=YOUR_GOOGLE_CLIENT_SECRET
-    networks:
-      - taskmanagement-network
-
-  sqlserver:
+  db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password123!
-      - MSSQL_PID=Express
+      SA_PASSWORD: "YourStrongPassword123!"
+      ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver-data:/var/opt/mssql
-    networks:
-      - taskmanagement-network
-
-networks:
-  taskmanagement-network:
-    driver: bridge
+      - sqlserver_data:/var/opt/mssql
+  
+  taskmanagement:
+    build: 
+      context: ./TaskManagementSystem/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskManagementSystem;User=sa;Password=YourStrongPassword123!;Encrypt=False;
+      - EmailSettings__SmtpServer=smtp.mailtrap.io
+      - EmailSettings__SmtpPort=2525
+      - EmailSettings__SmtpUsername=your_mailtrap_username
+      - EmailSettings__SmtpPassword=your_mailtrap_password
+      - EmailSettings__SenderEmail=noreply@taskmanagementsystem.com
+      - EmailSettings__SenderName=Task Management System
+      - GoogleAuth__ClientId=your_google_client_id
+      - GoogleAuth__ClientSecret=your_google_client_secret
 
 volumes:
-  sqlserver-data:
-    driver: local 
+  sqlserver_data: 

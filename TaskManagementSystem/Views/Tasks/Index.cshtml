@@ -1,375 +1,42 @@
-@model TaskManagementSystem.Models.TaskListViewModel
-@using System.Security.Claims
+@model IEnumerable<TaskManagementSystem.Models.TaskItem>
 
 @{
     ViewData["Title"] = "Tasks";
 }
 
-<style>
-    /* Styles to expand the task list */
-    .task-list-card {
-        min-height: 450px;
-    }
-    
-    .task-list-table tbody tr {
-        height: 60px;
-    }
-    
-    .task-list-table {
-        margin-bottom: 0;
-    }
-    
-    /* Empty state message styling */
-    .empty-state {
-        padding: 60px 0;
-        text-align: center;
-    }
-    
-    .empty-state i {
-        font-size: 3rem;
-        color: #6c757d;
-        margin-bottom: 1rem;
-    }
-    
-    /* Fixed position popup menu implementation */
-    .popup-menu {
-        position: fixed;
-        z-index: 9999;
-        background-color: #343a40;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 0.25rem;
-        padding: 0.5rem 0;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
-        display: none;
-        min-width: 180px;
-    }
-    
-    .popup-menu-item {
-        display: block;
-        padding: 0.5rem 1rem;
-        color: #fff;
-        text-decoration: none;
-        transition: background-color 0.2s;
-    }
-    
-    .popup-menu-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        text-decoration: none;
-    }
-    
-    .popup-menu-item.active {
-        background-color: #0d6efd;
-    }
-    
-    .popup-menu-divider {
-        height: 0;
-        margin: 0.5rem 0;
-        overflow: hidden;
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    
-    .popup-menu-header {
-        display: block;
-        padding: 0.5rem 1rem;
-        font-size: 0.75rem;
-        color: #adb5bd;
-        font-weight: bold;
-    }
-</style>
+<h1>My Tasks</h1>
 
-<div class="container">
-    <h1 class="text-white mb-4">My Tasks</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Task</a>
+</p>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <a asp-action="Create" class="btn btn-primary">Create New Task</a>
-        </div>
-        <div class="col-md-6">
-            <div class="float-end">
-                <form asp-action="Index" method="get" class="form-inline">
-                    <div class="input-group">
-                        <label class="input-group-text bg-dark text-white border-secondary" for="statusFilter">Status</label>
-                        <select id="statusFilter" name="statusFilter" class="form-select bg-dark text-white border-secondary" onchange="this.form.submit()">
-                            <option value="All" selected="@(Model.StatusFilter == "All")">All</option>
-                            <option value="ToDo" selected="@(Model.StatusFilter == "ToDo")">To Do</option>
-                            <option value="InProgress" selected="@(Model.StatusFilter == "InProgress")">In Progress</option>
-                            <option value="Done" selected="@(Model.StatusFilter == "Done")">Done</option>
-                        </select>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-@(item.Priority.ToString().ToLower())">
+                    <h5 class="card-title">@item.Title</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@item.Description</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Due: @item.DueDate.ToString("MMM dd, yyyy")
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                        @if (User.Identity.Name == item.CreatedBy || User.IsInRole("Admin")) 
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        }
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="card bg-dark text-white border-secondary task-list-card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover task-list-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <a asp-action="Index" asp-route-statusFilter="@Model.StatusFilter" asp-route-sortOrder="@(Model.SortOrder == "title_asc" ? "title_desc" : "title_asc")" class="text-white text-decoration-none">
-                                    Title
-                                    @if (Model.SortOrder == "title_asc")
-                                    {
-                                        <i class="bi bi-arrow-up"></i>
-                                    }
-                                    else if (Model.SortOrder == "title_desc")
-                                    {
-                                        <i class="bi bi-arrow-down"></i>
-                                    }
-                                </a>
-                            </th>
-                            <th>Description</th>
-                            <th>
-                                <a asp-action="Index" asp-route-statusFilter="@Model.StatusFilter" asp-route-sortOrder="@(Model.SortOrder == "dueDate_asc" ? "dueDate_desc" : "dueDate_asc")" class="text-white text-decoration-none">
-                                    Due Date
-                                    @if (Model.SortOrder == "dueDate_asc")
-                                    {
-                                        <i class="bi bi-arrow-up"></i>
-                                    }
-                                    else if (Model.SortOrder == "dueDate_desc")
-                                    {
-                                        <i class="bi bi-arrow-down"></i>
-                                    }
-                                </a>
-                            </th>
-                            <th>
-                                <a asp-action="Index" asp-route-statusFilter="@Model.StatusFilter" asp-route-sortOrder="@(Model.SortOrder == "status_asc" ? "status_desc" : "status_asc")" class="text-white text-decoration-none">
-                                    Status
-                                    @if (Model.SortOrder == "status_asc")
-                                    {
-                                        <i class="bi bi-arrow-up"></i>
-                                    }
-                                    else if (Model.SortOrder == "status_desc")
-                                    {
-                                        <i class="bi bi-arrow-down"></i>
-                                    }
-                                </a>
-                            </th>
-                            <th>
-                                <a asp-action="Index" asp-route-statusFilter="@Model.StatusFilter" asp-route-sortOrder="@(Model.SortOrder == "priority_asc" ? "priority_desc" : "priority_asc")" class="text-white text-decoration-none">
-                                    Priority
-                                    @if (Model.SortOrder == "priority_asc")
-                                    {
-                                        <i class="bi bi-arrow-up"></i>
-                                    }
-                                    else if (Model.SortOrder == "priority_desc")
-                                    {
-                                        <i class="bi bi-arrow-down"></i>
-                                    }
-                                </a>
-                            </th>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <th>User</th>
-                            }
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Tasks.Any())
-                        {
-                            @foreach (var item in Model.Tasks)
-                            {
-                                <tr>
-                                    <td>@item.Title</td>
-                                    <td>@(string.IsNullOrEmpty(item.Description) ? "No description" : (item.Description.Length > 50 ? $"{item.Description.Substring(0, 47)}..." : item.Description))</td>
-                                    <td>@item.DueDate.ToString("MMM dd, yyyy")</td>
-                                    <td>
-                                        <span class="badge @GetStatusBadgeClass(item.Status)">@item.Status</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge @GetPriorityBadgeClass(item.Priority)">@item.Priority</span>
-                                    </td>
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <td>@item.User?.UserName</td>
-                                    }
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-light actions-button" 
-                                                data-task-id="@item.Id" 
-                                                data-task-owner="@item.UserId"
-                                                data-is-owner="@(User.FindFirstValue(ClaimTypes.NameIdentifier) == item.UserId ? "true" : "false")"
-                                                data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")">
-                                            Actions
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="@(User.IsInRole("Admin") ? 7 : 6)" class="empty-state">
-                                    <i class="bi bi-clipboard-x"></i>
-                                    <h4>No tasks found</h4>
-                                    <p class="text-muted">Create a new task to get started</p>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Popup menu template (will be cloned and positioned by JavaScript) -->
-<div id="popupMenuTemplate" class="popup-menu" style="display: none;">
-    <a href="#" class="popup-menu-item details-action">Details</a>
-    <a href="#" class="popup-menu-item edit-action">Edit</a>
-    <a href="#" class="popup-menu-item delete-action">Delete</a>
-    <div class="popup-menu-divider"></div>
-    <span class="popup-menu-header">Change Status</span>
-    <a href="#" class="popup-menu-item status-action" data-status="ToDo">To Do</a>
-    <a href="#" class="popup-menu-item status-action" data-status="InProgress">In Progress</a>
-    <a href="#" class="popup-menu-item status-action" data-status="Done">Done</a>
-</div>
-
-@functions {
-    string GetStatusBadgeClass(TaskManagementSystem.Models.TaskStatus status)
-    {
-        return status switch
-        {
-            TaskManagementSystem.Models.TaskStatus.ToDo => "bg-secondary",
-            TaskManagementSystem.Models.TaskStatus.InProgress => "bg-primary",
-            TaskManagementSystem.Models.TaskStatus.Done => "bg-success",
-            _ => "bg-secondary"
-        };
     }
-
-    string GetPriorityBadgeClass(TaskManagementSystem.Models.TaskPriority priority)
-    {
-        return priority switch
-        {
-            TaskManagementSystem.Models.TaskPriority.Low => "bg-secondary",
-            TaskManagementSystem.Models.TaskPriority.Medium => "bg-primary",
-            TaskManagementSystem.Models.TaskPriority.High => "bg-danger",
-            _ => "bg-secondary"
-        };
-    }
-}
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all action buttons
-            const actionButtons = document.querySelectorAll('.actions-button');
-            
-            // Get the popup menu template
-            const popupMenuTemplate = document.getElementById('popupMenuTemplate');
-            
-            // Keep track of the active popup
-            let activePopup = null;
-            
-            // Function to close any active popup
-            function closeActivePopup() {
-                if (activePopup) {
-                    document.body.removeChild(activePopup);
-                    activePopup = null;
-                }
-            }
-            
-            // Close popup when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.actions-button') && !e.target.closest('.popup-menu')) {
-                    closeActivePopup();
-                }
-            });
-            
-            // Setup each action button
-            actionButtons.forEach(function(button) {
-                const taskId = button.getAttribute('data-task-id');
-                
-                button.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    // Close any active popup first
-                    closeActivePopup();
-                    
-                    // Create a new popup for this button
-                    const popup = popupMenuTemplate.cloneNode(true);
-                    popup.removeAttribute('id');
-                    popup.style.display = 'block';
-                    
-                    // Get permission data
-                    const isOwner = button.getAttribute('data-is-owner') === 'true';
-                    const isAdmin = button.getAttribute('data-is-admin') === 'true';
-                    
-                    // Setup the action links with the correct task ID
-                    popup.querySelector('.details-action').href = '@Url.Action("Details")/' + taskId;
-                    
-                    // Only show edit/delete for owner or admin
-                    const editLink = popup.querySelector('.edit-action');
-                    const deleteLink = popup.querySelector('.delete-action');
-                    
-                    if (isOwner || isAdmin) {
-                        editLink.href = '@Url.Action("Edit")/' + taskId;
-                        deleteLink.href = '@Url.Action("Delete")/' + taskId;
-                    } else {
-                        // Hide edit/delete for non-owners
-                        editLink.style.display = 'none';
-                        deleteLink.style.display = 'none';
-                    }
-                    
-                    // Only allow status changes for owner or admin
-                    const statusLinks = popup.querySelectorAll('.status-action');
-                    const statusHeader = popup.querySelector('.popup-menu-header');
-                    const statusDivider = popup.querySelector('.popup-menu-divider');
-                    
-                    if (isOwner || isAdmin) {
-                        statusLinks.forEach(function(link) {
-                            const status = link.getAttribute('data-status');
-                            link.href = '@Url.Action("ChangeStatus")/' + taskId + '?status=' + status;
-                        });
-                    } else {
-                        // Hide status change options for non-owners
-                        statusHeader.style.display = 'none';
-                        statusDivider.style.display = 'none';
-                        statusLinks.forEach(link => link.style.display = 'none');
-                    }
-                    
-                    // Append to body (not inside any other container)
-                    document.body.appendChild(popup);
-                    
-                    // Get button position
-                    const buttonRect = button.getBoundingClientRect();
-                    
-                    // Position the popup
-                    const popupWidth = popup.offsetWidth;
-                    const popupHeight = popup.offsetHeight;
-                    const windowWidth = window.innerWidth;
-                    const windowHeight = window.innerHeight;
-                    
-                    // Default positioning (below and right-aligned with the button)
-                    let left = buttonRect.right - popupWidth;
-                    let top = buttonRect.bottom + window.scrollY;
-                    
-                    // Ensure the menu doesn't go off the right edge
-                    if (left < 0) {
-                        left = buttonRect.left;
-                    }
-                    
-                    // Ensure the menu doesn't go off the left edge
-                    if (left + popupWidth > windowWidth) {
-                        left = windowWidth - popupWidth - 5;
-                    }
-                    
-                    // If there's not enough space below, position above
-                    if (buttonRect.bottom + popupHeight > windowHeight && buttonRect.top > popupHeight) {
-                        top = buttonRect.top + window.scrollY - popupHeight;
-                    }
-                    
-                    // Ensure the menu is fully visible
-                    popup.style.left = Math.max(5, left) + 'px';
-                    popup.style.top = Math.max(5, top) + 'px';
-                    
-                    // Keep track of this popup
-                    activePopup = popup;
-                });
-            });
-        });
-    </script>
-} 
+</div> 
